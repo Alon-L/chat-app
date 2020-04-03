@@ -3,22 +3,32 @@ package user
 import (
 	"context"
 	"encoding/json"
+	"github.com/daycolor/chat-app/credentials"
 	"github.com/daycolor/chat-app/mongo"
 	"net/http"
 )
 
-func Register(w http.ResponseWriter, _ *http.Request, registration Registration) {
+func Register(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	password := registration.Password.Salt()
-	_, err := registration.Password.Hash()
+	var cred credentials.Credentials
+
+	err := json.NewDecoder(r.Body).Decode(&cred)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	if match := registration.Password.Compare(password); !match {
+	password := cred.Password.Salt()
+	_, err = cred.Password.Hash()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if match := cred.Password.Compare(password); !match {
 		http.Error(w, "Password hashing failed", http.StatusInternalServerError)
 		return
 	}
@@ -30,8 +40,19 @@ func Register(w http.ResponseWriter, _ *http.Request, registration Registration)
 		return
 	}
 
+	token, err := cred.Username.GenerateToken()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	users := database.Collection("users")
-	res, err := users.InsertOne(context.TODO(), registration)
+
+	res, err := users.InsertOne(context.TODO(), mongo.User{
+		Credentials: &cred,
+		Token:       token,
+	})
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

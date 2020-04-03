@@ -3,10 +3,16 @@ package mongo
 import (
 	"context"
 	"github.com/daycolor/chat-app/config"
+	"github.com/daycolor/chat-app/credentials"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 )
+
+type User struct {
+	*credentials.Credentials
+	Token string
+}
 
 func ConnectDB() (*mongo.Database, error) {
 	mongoConfig := config.MongoConfig{}
