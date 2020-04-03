@@ -10,7 +10,7 @@ import (
 func main() {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/api/register", user.Register).Methods("POST")
+	r.HandleFunc("/api/user/register", user.Middleware(user.Register)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
