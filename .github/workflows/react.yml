@@ -15,14 +15,13 @@ jobs:
         with:
           node-version: 12
 
-      - name: Set project dir environment var
-        run: echo ::set-env name=PROJECT_DIR::"$GITHUB_WORKSPACE/client"
-
       - name: Install dependencies
         run: npm install
+        working-directory: ./client
 
       - name: Run ESLint
         run: npm run lint
+        working-directory: ./client
         
   typescript:
     name: TypeScript
@@ -36,14 +35,13 @@ jobs:
         with:
           node-version: 12
 
-      - name: Set project dir environment var
-        run: echo ::set-env name=PROJECT_DIR::"$GITHUB_WORKSPACE/client"
-
       - name: Install dependencies
         run: npm install
+        working-directory: ./client
 
       - name: Run TypeScript compiler
         run: npm run typescript
+        working-directory: ./client
         
   build:
     name: Build
@@ -56,12 +54,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-      
-      - name: Set project dir environment var
-        run: echo ::set-env name=PROJECT_DIR::"$GITHUB_WORKSPACE/client"
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./client
 
       - name: Build app
         run: npm run build
+        working-directory: ./client
