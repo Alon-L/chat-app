@@ -26,11 +26,11 @@ jobs:
       run: |
         cd server
         pwd
+        ls
 
     - name: Get dependencies
       run: |
-        go mod download
-        # go get -v -t -d ./...
+        go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
