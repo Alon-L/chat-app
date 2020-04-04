@@ -3,14 +3,14 @@ package mongo
 import (
 	"context"
 	"github.com/daycolor/chat-app/config"
-	"github.com/daycolor/chat-app/credentials"
+	"github.com/daycolor/chat-app/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 )
 
 type User struct {
-	*credentials.Credentials
+	*models.User
 	Token string
 }
 

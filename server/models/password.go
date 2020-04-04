@@ -1,4 +1,4 @@
-package credentials
+package models
 
 import "golang.org/x/crypto/bcrypt"
 
@@ -6,20 +6,19 @@ type Password string
 
 var salt = "_chatapp_"
 
-func (p *Password) Salt() Password {
+func (p *Password) Salt() {
 	*p += Password(salt)
-	return *p
 }
 
-func (p *Password) Hash() (Password, error) {
+func (p *Password) Hash() error {
 	hash, err := bcrypt.GenerateFromPassword([]byte(*p), bcrypt.DefaultCost)
 
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	*p = Password(hash)
-	return *p, nil
+	return nil
 }
 
 func (p Password) Compare(password Password) bool {
