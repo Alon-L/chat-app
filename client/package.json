@@ -1,7 +1,7 @@
 {
   "name": "chat-app",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@material-ui/core": "^4.9.8",
     "@testing-library/jest-dom": "^4.2.4",
